@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Solicitação de Serviço - Moisés Avelino Instituto Digital</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("cDfXutPGgZv2avweb"); // Public Key
+    })();
+  </script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -39,6 +45,7 @@
       background: #25d366; color: white;
       border: none; border-radius: 5px;
       font-size: 16px; cursor: pointer;
+      margin-top: 10px;
     }
     button:hover { background: #1ebe5d; }
     .links {
@@ -58,14 +65,14 @@
     <img src="logo.jpeg" alt="Logo Moisés Avelino" class="logo">
     <h2>Solicitação de Serviço</h2>
     <form id="form">
-      <input type="text" id="cliente" placeholder="Cliente (Clínica/Dentista)" required>
-      <input type="text" id="paciente" placeholder="Paciente" required>
+      <input type="text" id="cliente" name="cliente" placeholder="Cliente (Clínica/Dentista)" required>
+      <input type="text" id="paciente" name="paciente" placeholder="Paciente" required>
 
-      <input type="text" id="cro" placeholder="CRO (Opcional)">
-      <input type="text" id="cpfcnpj" placeholder="CPF/CNPJ (Opcional)">
-      <input type="text" id="endereco" placeholder="Endereço (Opcional)">
+      <input type="text" id="cro" name="cro" placeholder="CRO (Opcional)">
+      <input type="text" id="cpfcnpj" name="cpfcnpj" placeholder="CPF/CNPJ (Opcional)">
+      <input type="text" id="endereco" name="endereco" placeholder="Endereço (Opcional)">
       
-      <select id="servico" required>
+      <select id="servico" name="servico" required>
         <option value="">Selecione o Serviço</option>
         <option value="Coroa de e-max">Coroa de e-max</option>
         <option value="Laminados e-max">Laminados e-max</option>
@@ -79,17 +86,20 @@
         <option value="Planejamento digital">Planejamento digital</option>
       </select>
 
-      <select id="material" required>
+      <select id="material" name="material" required>
         <option value="">Selecione o Material</option>
         <option value="Zircônia">Zircônia</option>
         <option value="Emax">Emax</option>
         <option value="PMMA">PMMA</option>
       </select>
 
-      <input type="text" id="cor" placeholder="Cor" required>
-      <textarea id="obs" placeholder="Observações"></textarea>
+      <input type="text" id="cor" name="cor" placeholder="Cor" required>
+      <textarea id="obs" name="obs" placeholder="Observações"></textarea>
 
-      <button type="submit">Enviar pelo WhatsApp</button>
+      <label><b>Anexar Arquivos (.stl / .ply)</b></label>
+      <input type="file" id="arquivos" name="arquivos" accept=".stl,.ply" multiple>
+
+      <button type="submit">Enviar</button>
       <button type="button" onclick="window.open('tabela_servicos.jpeg', '_blank')">📥 Baixar Tabela de Serviços</button>
     </form>
     <div class="links">
@@ -110,17 +120,27 @@
       let material = document.getElementById("material").value;
       let cor = document.getElementById("cor").value;
       let obs = document.getElementById("obs").value;
+      let arquivos = document.getElementById("arquivos").files;
 
+      // --- Envio via WhatsApp ---
       let msg = `📌 *Solicitação de Serviço*\n\n🏥 Cliente: ${cliente}\n🧑 Paciente: ${paciente}`;
       if(cro) msg += `\n🔢 CRO: ${cro}`;
       if(cpfcnpj) msg += `\n🪪 CPF/CNPJ: ${cpfcnpj}`;
       if(endereco) msg += `\n📍 Endereço: ${endereco}`;
       msg += `\n🦷 Serviço: ${servico}\n⚙️ Material: ${material}\n🎨 Cor: ${cor}\n✏️ Observações: ${obs}`;
+      if(arquivos.length > 0) msg += `\n📎 Arquivos anexados serão enviados por e-mail.`;
 
-      let numero = "5571992863990";
+      let numero = "5571993209015";
       let url = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
-
       window.open(url, "_blank");
+
+      // --- Envio de anexos via EmailJS ---
+      emailjs.sendForm("service_omrmh59", "template_4hr7ydn", e.target)
+        .then(function() {
+          alert("✅ Arquivos enviados com sucesso por e-mail!");
+        }, function(error) {
+          alert("❌ Erro ao enviar arquivos: " + JSON.stringify(error));
+        });
     });
   </script>
 </body>
