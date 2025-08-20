@@ -1,243 +1,325 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instituto Digital Moisés Avelino</title>
-  <link rel="icon" type="image/png" href="favicon.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solicitação de Serviço - Moisés Avelino Instituto Digital</title>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("cDfXutPGgZv2avweb"); // Public Key
+    })();
+  </script>
+
+  <!-- Three.js + loaders + controls -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/loaders/STLLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/loaders/PLYLoader.js"></script>
+
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f4f7fb;
-      color: #333;
+    :root{
+      --brand:#25d366;
+      --bg:#f5f5f5;
+      --card:#fff;
+      --text:#222;
+      --muted:#6b7280;
     }
-    header {
-      text-align: center;
-      background: linear-gradient(135deg, #004080, #0066cc);
-      color: white;
-      padding: 20px;
+    *{box-sizing:border-box}
+    body{
+      font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, sans-serif;
+      background:var(--bg);
+      margin:0; padding:24px;
+      color:var(--text);
     }
-    header img.logo {
-      max-width: 180px;
-      height: auto;
-      display: block;
-      margin: 0 auto 10px;
+    .container{
+      background:var(--card);
+      max-width:900px;margin:0 auto;
+      border-radius:16px;padding:22px;
+      box-shadow:0 10px 25px rgba(0,0,0,.06);
     }
-    @media (max-width: 600px) {
-      header img.logo { max-width: 120px; }
+    header{
+      display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between;margin-bottom:8px;
     }
-    form {
-      background: white;
-      max-width: 650px;
-      margin: 20px auto;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    .brand{
+      display:flex;align-items:center;gap:14px;
     }
-    h2.section-title {
-      font-size: 18px;
-      color: #004080;
-      border-bottom: 2px solid #004080;
-      padding-bottom: 5px;
-      margin-top: 20px;
+    .logo{
+      display:block;height:auto;
+      max-width:220px;
     }
-    .input-group {
-      margin: 12px 0;
-      display: flex;
-      align-items: center;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background: #fafafa;
-      padding: 5px 10px;
+    @media (max-width: 600px){
+      .logo{max-width:130px;}
     }
-    .input-group span {
-      font-size: 18px;
-      margin-right: 10px;
-      color: #004080;
+    .ig-link{
+      display:inline-flex;align-items:center;gap:8px;
+      text-decoration:none;color:#111;font-weight:700;
+      border:1px solid #e5e7eb;border-radius:999px;padding:8px 12px;
+      background:#fff;
     }
-    .input-group input, .input-group select, .input-group textarea {
-      flex: 1;
-      border: none;
-      background: transparent;
-      padding: 10px;
-      outline: none;
-      font-size: 15px;
+    .ig-link img{width:22px;height:22px;border-radius:6px}
+    h2{margin:0 0 6px 0;font-size:20px}
+    p.sub{margin:0;color:var(--muted);font-size:13px}
+
+    form label{font-weight:600;display:block;margin-top:10px}
+    input, select, textarea{
+      width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-top:6px;font-size:15px
     }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
+    textarea{min-height:90px;resize:vertical}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media (max-width:700px){.grid-2{grid-template-columns:1fr}}
+
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+    .btn{border:0;border-radius:10px;padding:12px 16px;font-size:15px;cursor:pointer;}
+    .btn-primary{background:var(--brand);color:#fff}
+    .btn-outline{background:#fff;border:1px solid #ddd}
+
+    .viewer-card{
+      margin-top:16px;border:1px solid #e5e7eb;border-radius:14px;padding:12px;
     }
-    button {
-      background: #0066cc;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-      width: 100%;
-      font-size: 16px;
-      transition: 0.3s;
-    }
-    button:hover { background: #004080; }
-    .links {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .links button {
-      width: auto;
-      margin: 10px;
-      padding: 10px 15px;
-      border-radius: 6px;
-    }
-    .file-label {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-      color: #004080;
-    }
+    #viewer{width:100%;height:420px;background:#eef2f7;border-radius:10px;overflow:hidden}
+    @media (max-width:600px){#viewer{height:320px}}
+    .hint{color:var(--muted);font-size:12px}
   </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img src="logo.jpeg" class="logo" alt="Logo Moisés Avelino">
+        <div>
+          <h2>Moisés Avelino — Instituto Digital</h2>
+          <p class="sub">Solicitação de serviços para laboratório de prótese</p>
+        </div>
+      </div>
+      <a class="ig-link" href="https://www.instagram.com/instituto_moises_avelino_?igsh=MTV4dXM1ODI0eWExeQ%3D%3D&utm_source=qr" target="_blank" rel="noopener">
+        <img src="instagram.svg" alt="Instagram"> Instagram
+      </a>
+    </header>
 
-<header>
-  <img src="logo.jpeg" alt="Instituto Digital Moisés Avelino" class="logo">
-  <h1>Instituto Digital Moisés Avelino</h1>
-</header>
+    <form id="form">
+      <!-- EmailJS helper -->
+      <input type="hidden" name="reply_to" value="centrodeusinagemmprotese@gmail.com">
 
-<div class="links">
-  <a href="https://wa.me/5571992863990" target="_blank">
-    <button>📲 Fale no WhatsApp</button>
-  </a>
-  <a href="https://www.instagram.com/instituto_moises_avelino_?igsh=MTV4dXM1ODI0eWExeQ%3D%3D&utm_source=qr" target="_blank">
-    <img src="instagram.png" alt="Instagram" style="width:40px;height:40px;border-radius:50%;">
-  </a>
-</div>
+      <div class="grid-2">
+        <div>
+          <label for="cliente">Cliente (Clínica/Dentista)</label>
+          <input type="text" id="cliente" name="cliente" required>
+        </div>
+        <div>
+          <label for="paciente">Paciente</label>
+          <input type="text" id="paciente" name="paciente" required>
+        </div>
+      </div>
 
-<form id="form">
-  <input type="hidden" name="reply_to" value="centrodeusinagemmprotese@gmail.com">
+      <div class="grid-2">
+        <div>
+          <label for="cro">CRO (Opcional)</label>
+          <input type="text" id="cro" name="cro">
+        </div>
+        <div>
+          <label for="cpfcnpj">CPF/CNPJ (Opcional)</label>
+          <input type="text" id="cpfcnpj" name="cpfcnpj">
+        </div>
+      </div>
 
-  <h2 class="section-title">🧑 Cliente / Paciente</h2>
-  <div class="input-group"><span>👤</span><input type="text" id="cliente" name="cliente" placeholder="Cliente (Clínica/Dentista)" required></div>
-  <div class="input-group"><span>🦷</span><input type="text" id="paciente" name="paciente" placeholder="Paciente" required></div>
-  <div class="input-group"><span>🆔</span><input type="text" id="cro" name="cro" placeholder="CRO (Opcional)"></div>
-  <div class="input-group"><span>📑</span><input type="text" id="cpfcnpj" name="cpfcnpj" placeholder="CPF/CNPJ (Opcional)"></div>
-  <div class="input-group"><span>📍</span><input type="text" id="endereco" name="endereco" placeholder="Endereço (Opcional)"></div>
+      <label for="endereco">Endereço (Opcional)</label>
+      <input type="text" id="endereco" name="endereco">
 
-  <h2 class="section-title">📄 Serviço</h2>
-  <div class="input-group">
-    <span>🛠️</span>
-    <select id="servico" name="servico" required>
-      <option value="">Selecione o Serviço</option>
-      <option value="Coroa de e-max">Coroa de e-max</option>
-      <option value="Laminados e-max">Laminados e-max</option>
-      <option value="Facetas">Facetas</option>
-      <option value="Onlay/Inlay">Onlay/Inlay</option>
-      <option value="Prótese sobre implante">Prótese sobre implante</option>
-      <option value="Coroa zircônia">Coroa zircônia</option>
-      <option value="Protocolo em zircônia">Protocolo em zircônia</option>
-      <option value="PMMA">PMMA</option>
-      <option value="Modelo impresso">Modelo impresso</option>
-      <option value="Planejamento digital">Planejamento digital</option>
-    </select>
+      <div class="grid-2">
+        <div>
+          <label for="servico">Serviço</label>
+          <select id="servico" name="servico" required>
+            <option value="">Selecione o Serviço</option>
+            <option value="Coroa de e-max">Coroa de e-max</option>
+            <option value="Laminados e-max">Laminados e-max</option>
+            <option value="Facetas">Facetas</option>
+            <option value="Onlay/Inlay">Onlay/Inlay</option>
+            <option value="Prótese sobre implante">Prótese sobre implante</option>
+            <option value="Coroa zircônia">Coroa zircônia</option>
+            <option value="Protocolo em zircônia">Protocolo em zircônia</option>
+            <option value="PMMA">PMMA</option>
+            <option value="Modelo impresso">Modelo impresso</option>
+            <option value="Planejamento digital">Planejamento digital</option>
+          </select>
+        </div>
+        <div>
+          <label for="material">Material</label>
+          <select id="material" name="material" required>
+            <option value="">Selecione o Material</option>
+            <option value="Zircônia">Zircônia</option>
+            <option value="Emax">Emax</option>
+            <option value="PMMA">PMMA</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <label for="cor">Cor</label>
+          <input type="text" id="cor" name="cor" placeholder="Ex.: A2" required>
+        </div>
+        <div>
+          <label for="telefone">Telefone (opcional)</label>
+          <input type="tel" id="telefone" name="telefone" placeholder="(DDD) número">
+        </div>
+      </div>
+
+      <label for="obs">Observações</label>
+      <textarea id="obs" name="obs" placeholder="Instruções adicionais..."></textarea>
+
+      <label><b>Anexar Arquivos (.stl / .ply)</b> <span class="hint">Arquivos serão enviados por e-mail</span></label>
+      <input type="file" id="arquivos" name="arquivos" accept=".stl,.ply" multiple>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">Enviar</button>
+        <a class="btn btn-outline" href="tabela_servicos.jpeg" download>📥 Baixar Tabela de Serviços</a>
+      </div>
+    </form>
+
+    <div class="viewer-card">
+      <strong>Visualização 3D (STL/PLY)</strong>
+      <p class="hint">Carregue um arquivo para pré-visualização local (não envia nada ainda).</p>
+      <input type="file" id="view3d" accept=".stl,.ply">
+      <div id="viewer"></div>
+    </div>
   </div>
 
-  <div class="input-group">
-    <span>⚙️</span>
-    <select id="material" name="material" required>
-      <option value="">Selecione o Material</option>
-      <option value="Zircônia">Zircônia</option>
-      <option value="Emax">Emax</option>
-      <option value="PMMA">PMMA</option>
-    </select>
-  </div>
+  <script>
+    // -------- WhatsApp + EmailJS --------
+    document.getElementById("form").addEventListener("submit", function(e){
+      e.preventDefault();
+      
+      const cliente = document.getElementById("cliente").value;
+      const paciente = document.getElementById("paciente").value;
+      const cro = document.getElementById("cro").value;
+      const cpfcnpj = document.getElementById("cpfcnpj").value;
+      const endereco = document.getElementById("endereco").value;
+      const servico = document.getElementById("servico").value;
+      const material = document.getElementById("material").value;
+      const cor = document.getElementById("cor").value;
+      const telefone = document.getElementById("telefone").value;
+      const obs = document.getElementById("obs").value;
+      const arquivos = document.getElementById("arquivos").files;
 
-  <div class="input-group"><span>🎨</span><input type="text" id="cor" name="cor" placeholder="Cor" required></div>
-  <div class="input-group"><span>📝</span><textarea id="obs" name="obs" placeholder="Observações"></textarea></div>
+      let msg = `📌 *Solicitação de Serviço*\n\n🏥 Cliente: ${cliente}\n🧑 Paciente: ${paciente}`;
+      if(cro) msg += `\n🔢 CRO: ${cro}`;
+      if(cpfcnpj) msg += `\n🪪 CPF/CNPJ: ${cpfcnpj}`;
+      if(endereco) msg += `\n📍 Endereço: ${endereco}`;
+      msg += `\n🦷 Serviço: ${servico}\n⚙️ Material: ${material}\n🎨 Cor: ${cor}`;
+      if(telefone) msg += `\n📞 Telefone: ${telefone}`;
+      msg += `\n✏️ Observações: ${obs}`;
+      if(arquivos.length > 0) msg += `\n📎 Arquivos anexados serão enviados por e-mail.`;
 
-  <h2 class="section-title">📂 Arquivos</h2>
-  <label class="file-label">Anexar Arquivos (.stl / .ply, máx 50MB)</label>
-  <input type="file" id="arquivos" name="arquivos" accept=".stl,.ply" multiple>
+      const numero = "5571993209015";
+      const url = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
+      window.open(url, "_blank");
 
-  <button type="submit">📤 Enviar Solicitação</button>
-  <button type="button" onclick="window.open('tabela_servicos.jpeg', '_blank')">📥 Baixar Tabela de Serviços</button>
-</form>
+      emailjs.sendForm("service_omrmh59", "template_4hr7ydn", e.target)
+        .then(function() {
+          alert("✅ Arquivos (selec.) e dados enviados por e-mail!");
+        }, function(error) {
+          alert("❌ Erro ao enviar por e-mail: " + JSON.stringify(error));
+        });
+    });
 
-<h2 style="text-align:center; margin-top:40px;">🖥️ Visualização 3D</h2>
-<input type="file" id="view3d" accept=".stl,.ply" style="display:block;margin:10px auto;">
-<div id="viewer" style="width:95%;max-width:800px;height:400px;background:#eee;margin:0 auto;border-radius:8px;"></div>
+    // -------- Visualizador 3D --------
+    const container = document.getElementById('viewer');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xEEF2F7);
+    const camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 0.01, 1000);
+    camera.position.set(0, 0.2, 2.2);
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/loaders/STLLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/loaders/PLYLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    const renderer = new THREE.WebGLRenderer({antialias:true});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
 
-<script>
-  emailjs.init("cDfXutPGgZv2avweb");
+    const light = new THREE.HemisphereLight(0xffffff, 0x888888, 1);
+    scene.add(light);
+    const dir = new THREE.DirectionalLight(0xffffff, 0.8);
+    dir.position.set(2,3,4);
+    scene.add(dir);
 
-  // Validação anexos
-  document.getElementById("arquivos").addEventListener("change", function(e) {
-    for (let file of e.target.files) {
-      if (file.size > 50 * 1024 * 1024) {
-        alert("❌ O arquivo " + file.name + " ultrapassa 50MB!");
-        e.target.value = "";
-        return;
-      }
-      if (!file.name.endsWith(".stl") && !file.name.endsWith(".ply")) {
-        alert("❌ Apenas arquivos .stl ou .ply são permitidos.");
-        e.target.value = "";
-        return;
+    const grid = new THREE.GridHelper(10, 10);
+    grid.position.y = -0.5;
+    scene.add(grid);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+
+    let currentMesh = null;
+    function clearMesh(){
+      if(currentMesh){
+        scene.remove(currentMesh);
+        if(currentMesh.geometry) currentMesh.geometry.dispose();
+        currentMesh = null;
       }
     }
-  });
 
-  // Visualizador 3D
-  const container = document.getElementById('viewer');
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, container.clientWidth/container.clientHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({antialias:true});
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  container.appendChild(renderer.domElement);
+    function fitView(object){
+      const box = new THREE.Box3().setFromObject(object);
+      const size = box.getSize(new THREE.Vector3()).length();
+      const center = box.getCenter(new THREE.Vector3());
+      controls.reset();
+      camera.position.copy(center);
+      camera.position.z += size * 0.6 + 0.5;
+      camera.lookAt(center);
+      controls.target.copy(center);
+    }
 
-  const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
-  scene.add(light);
-  camera.position.z = 5;
-
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  document.getElementById("view3d").addEventListener("change", function(e){
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev){
-      let loader;
-      if(file.name.endsWith(".stl")){
-        loader = new THREE.STLLoader();
-        const geometry = loader.parse(ev.target.result);
-        const material = new THREE.MeshStandardMaterial({color:0xcccccc});
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-      } else if(file.name.endsWith(".ply")) {
-        loader = new THREE.PLYLoader();
-        const geometry = loader.parse(ev.target.result);
+    function loadBuffer(arrayBuffer, ext){
+      clearMesh();
+      let geometry;
+      if(ext === 'stl'){
+        const loader = new THREE.STLLoader();
+        geometry = loader.parse(arrayBuffer);
+      }else{
+        const loader = new THREE.PLYLoader();
+        geometry = loader.parse(arrayBuffer);
         geometry.computeVertexNormals();
-        const material = new THREE.MeshStandardMaterial({color:0xcccccc, flatShading:true});
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
       }
-    };
-    reader.readAsArrayBuffer(file);
-  });
+      geometry.center();
+      const material = new THREE.MeshStandardMaterial({metalness:0.05, roughness:0.8});
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+      currentMesh = mesh;
+      fitView(mesh);
+    }
 
-  function animate(){
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-  }
-  animate();
-</script>
+    function handleFile(file){
+      const ext = file.name.toLowerCase().endsWith('.stl') ? 'stl' : 'ply';
+      const reader = new FileReader();
+      reader.onload = (ev)=> loadBuffer(ev.target.result, ext);
+      reader.readAsArrayBuffer(file);
+    }
 
+    document.getElementById('view3d').addEventListener('change', (e)=>{
+      const file = e.target.files && e.target.files[0];
+      if(file) handleFile(file);
+    });
+
+    // Se o usuário escolher anexos, tenta pré-visualizar o primeiro STL/PLY
+    document.getElementById('arquivos').addEventListener('change', (e)=>{
+      const files = Array.from(e.target.files || []);
+      const first = files.find(f => /\.(stl|ply)$/i.test(f.name));
+      if(first) handleFile(first);
+    });
+
+    function onResize(){
+      const w = container.clientWidth, h = container.clientHeight;
+      camera.aspect = w/h; camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+    window.addEventListener('resize', onResize);
+
+    (function animate(){
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    })();
+  </script>
 </body>
 </html>
