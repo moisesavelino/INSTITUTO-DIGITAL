@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitação de Serviço - Moisés Avelino Instituto Digital</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0; padding: 0;
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 450px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 15px;
+      max-width: 150px;
+    }
+    input, select, textarea {
+      width: 100%; padding: 10px;
+      margin: 8px 0; border-radius: 5px; border: 1px solid #ccc;
+    }
+    button {
+      width: 100%; padding: 12px;
+      background: #25d366; color: white;
+      border: none; border-radius: 5px;
+      font-size: 16px; cursor: pointer;
+    }
+    button:hover { background: #1ebe5d; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="logo.jpeg" alt="Logo Moisés Avelino" class="logo">
+    <h2>Solicitação de Serviço</h2>
+    <form id="form">
+      <input type="text" id="cliente" placeholder="Cliente (Clínica/Dentista)" required>
+      <input type="text" id="paciente" placeholder="Paciente" required>
+      
+      <select id="servico" required>
+        <option value="">Selecione o Serviço</option>
+        <option value="Protocolo">Protocolo</option>
+        <option value="Coroa">Coroa</option>
+        <option value="Faceta">Faceta</option>
+        <option value="Bloco">Bloco</option>
+      </select>
+
+      <select id="material" required>
+        <option value="">Selecione o Material</option>
+        <option value="Zircônia">Zircônia</option>
+        <option value="Emax">Emax</option>
+        <option value="PMMA">PMMA</option>
+      </select>
+
+      <input type="text" id="cor" placeholder="Cor" required>
+      <textarea id="obs" placeholder="Observações"></textarea>
+      
+      <button type="submit">Enviar pelo WhatsApp</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("form").addEventListener("submit", function(e){
+      e.preventDefault();
+      
+      let cliente = document.getElementById("cliente").value;
+      let paciente = document.getElementById("paciente").value;
+      let servico = document.getElementById("servico").value;
+      let material = document.getElementById("material").value;
+      let cor = document.getElementById("cor").value;
+      let obs = document.getElementById("obs").value;
+
+      let msg = `📌 *Solicitação de Serviço*\n\n🏥 Cliente: ${cliente}\n🧑 Paciente: ${paciente}\n🦷 Serviço: ${servico}\n⚙️ Material: ${material}\n🎨 Cor: ${cor}\n✏️ Observações: ${obs}`;
+
+      let numero = "5599999999999"; // coloque o número do laboratório
+      let url = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
+
+      window.open(url, "_blank");
+    });
+  </script>
+</body>
+</html>
