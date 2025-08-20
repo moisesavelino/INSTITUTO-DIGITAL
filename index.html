@@ -225,6 +225,81 @@
         });
     });
 
+    // -------- Visualizador 3D --------
+    const container = document.getElementById('viewer');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xEEF2F7);
+    const camera = new THREE.PerspectiveCamera(60, container.clientWidth/container.clientHeight, 0.01, 1000);
+    camera.position.set(0, 0.2, 2.2);
+
+    const renderer = new THREE.WebGLRenderer({antialias:true});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    const light = new THREE.HemisphereLight(0xffffff, 0x888888, 1);
+    scene.add(light);
+    const dir = new THREE.DirectionalLight(0xffffff, 0.8);
+    dir.position.set(2,3,4);
+    scene.add(dir);
+
+    const grid = new THREE.GridHelper(10, 10);
+    grid.position.y = -0.5;
+    scene.add(grid);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+
+    let currentMesh = null;
+    function clearMesh(){
+      if(currentMesh){
+        scene.remove(currentMesh);
+        if(currentMesh.geometry) currentMesh.geometry.dispose();
+        currentMesh = null;
+      }
+    }
+
+    function fitView(object){
+      const box = new THREE.Box3().setFromObject(object);
+      const size = box.getSize(new THREE.Vector3()).length();
+      const center = box.getCenter(new THREE.Vector3());
+      controls.reset();
+      camera.position.copy(center);
+      camera.position.z += size * 0.6 + 0.5;
+      camera.lookAt(center);
+      controls.target.copy(center);
+    }
+
+    function loadBuffer(arrayBuffer, ext){
+      clearMesh();
+      let geometry;
+      if(ext === 'stl'){
+        const loader = new THREE.STLLoader();
+        geometry = loader.parse(arrayBuffer);
+      }else{
+        const loader = new THREE.PLYLoader();
+        geometry = loader.parse(arrayBuffer);
+        geometry.computeVertexNormals();
+      }
+      geometry.center();
+      const material = new THREE.MeshStandardMaterial({metalness:0.05, roughness:0.8});
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+      currentMesh = mesh;
+      fitView(mesh);
+    }
+
+    function handleFile(file){
+      const ext = file.name.toLowerCase().endsWith('.stl') ? 'stl' : 'ply';
+      const reader = new FileReader();
+      reader.onload = (ev)=> loadBuffer(ev.target.result, ext);
+      reader.readAsArrayBuffer(file);
+    }
+
+    document.getElementById('view3d').addEventListener('change', (e)=>{
+      const file = e.target.files && e.target.files[0];
+      if(file) handleFile(file);
+    });
 
     // Se o usuário escolher anexos, tenta pré-visualizar o primeiro STL/PLY
     document.getElementById('arquivos').addEventListener('change', (e)=>{
