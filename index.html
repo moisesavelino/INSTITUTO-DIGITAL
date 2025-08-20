@@ -17,7 +17,7 @@
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      max-width: 450px;
+      max-width: 600px;
       width: 100%;
     }
     h2 {
@@ -41,6 +41,38 @@
       font-size: 16px; cursor: pointer;
     }
     button:hover { background: #1ebe5d; }
+    .urgencia {
+      background: red !important;
+      margin-top: 10px;
+    }
+    .odontograma {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 5px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .dente {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .dente.selecionado {
+      background: #25d366;
+      color: white;
+    }
+    .links {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .links a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -53,10 +85,16 @@
       
       <select id="servico" required>
         <option value="">Selecione o Serviço</option>
-        <option value="Protocolo">Protocolo</option>
-        <option value="Coroa">Coroa</option>
-        <option value="Faceta">Faceta</option>
-        <option value="Bloco">Bloco</option>
+        <option value="Coroa de e-max">Coroa de e-max</option>
+        <option value="Laminados e-max">Laminados e-max</option>
+        <option value="Facetas">Facetas</option>
+        <option value="Onlay/Inlay">Onlay/Inlay</option>
+        <option value="Prótese sobre implante">Prótese sobre implante</option>
+        <option value="Coroa zircônia">Coroa zircônia</option>
+        <option value="Protocolo em zircônia">Protocolo em zircônia</option>
+        <option value="PMMA">PMMA</option>
+        <option value="Modelo impresso">Modelo impresso</option>
+        <option value="Planejamento digital">Planejamento digital</option>
       </select>
 
       <select id="material" required>
@@ -68,12 +106,36 @@
 
       <input type="text" id="cor" placeholder="Cor" required>
       <textarea id="obs" placeholder="Observações"></textarea>
+
+      <h3>Odontograma</h3>
+      <div class="odontograma" id="odontograma"></div>
       
       <button type="submit">Enviar pelo WhatsApp</button>
+      <button type="button" class="urgencia" onclick="enviarUrgencia()">🚨 URGÊNCIA</button>
+      <button type="button" onclick="window.open('tabela_servicos.jpeg', '_blank')">📥 Baixar Tabela de Serviços</button>
     </form>
+    <div class="links">
+      <a href="https://www.instagram.com/instituto_moises_avelino_?igsh=MTV4dXM1ODI0eWExeQ%3D%3D&utm_source=qr" target="_blank">📷 Instagram</a>
+    </div>
   </div>
 
   <script>
+    // Criar odontograma
+    const dentes = [
+      18,17,16,15,14,13,12,11,
+      21,22,23,24,25,26,27,28,
+      48,47,46,45,44,43,42,41,
+      31,32,33,34,35,36,37,38
+    ];
+    const odontoDiv = document.getElementById("odontograma");
+    dentes.forEach(num => {
+      let d = document.createElement("div");
+      d.classList.add("dente");
+      d.innerText = num;
+      d.onclick = () => d.classList.toggle("selecionado");
+      odontoDiv.appendChild(d);
+    });
+
     document.getElementById("form").addEventListener("submit", function(e){
       e.preventDefault();
       
@@ -84,13 +146,22 @@
       let cor = document.getElementById("cor").value;
       let obs = document.getElementById("obs").value;
 
-      let msg = `📌 *Solicitação de Serviço*\n\n🏥 Cliente: ${cliente}\n🧑 Paciente: ${paciente}\n🦷 Serviço: ${servico}\n⚙️ Material: ${material}\n🎨 Cor: ${cor}\n✏️ Observações: ${obs}`;
+      let dentesSelecionados = [...document.querySelectorAll(".dente.selecionado")].map(d => d.innerText).join(", ");
 
-      let numero = "5571993209015"; // número atualizado com DDI +55 e DDD 71
+      let msg = `📌 *Solicitação de Serviço*\n\n🏥 Cliente: ${cliente}\n🧑 Paciente: ${paciente}\n🦷 Serviço: ${servico}\n⚙️ Material: ${material}\n🎨 Cor: ${cor}\n✏️ Observações: ${obs}\n🦷 Dentes: ${dentesSelecionados}`;
+
+      let numero = "5571993209015";
       let url = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
 
       window.open(url, "_blank");
     });
+
+    function enviarUrgencia(){
+      let msg = "🚨 *ATENDIMENTO DE URGÊNCIA* 🚨\n\nFavor dar prioridade a esta solicitação.";
+      let numero = "5571993209015";
+      let url = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
+      window.open(url, "_blank");
+    }
   </script>
 </body>
 </html>
