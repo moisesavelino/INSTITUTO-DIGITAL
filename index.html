@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
   <script>
     (function(){
-      emailjs.init("cDfXutPGgZv2avweb"); // Public Key
+      emailjs.init("tXGudkSWYElWGNQCN"); // Public Key
     })();
   </script>
   <style>
@@ -130,12 +130,12 @@
       msg += `\n🦷 Serviço: ${servico}\n⚙️ Material: ${material}\n🎨 Cor: ${cor}\n✏️ Observações: ${obs}`;
       if(arquivos.length > 0) msg += `\n📎 Arquivos anexados serão enviados por e-mail.`;
 
-      let numero = "5571993209015";
+      let numero = "5571992863990";
       let url = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
       window.open(url, "_blank");
 
       // --- Envio de anexos via EmailJS ---
-      emailjs.sendForm("service_omrmh59", "template_emh68gp", e.target)
+      emailjs.sendForm("service_lnkja83", "template_emh68gp", e.target)
         .then(function() {
           alert("✅ Arquivos enviados com sucesso por e-mail!");
         }, function(error) {
